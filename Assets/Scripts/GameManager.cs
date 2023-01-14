@@ -39,8 +39,8 @@ public class GameManager : MonoBehaviour
         print("GAME OVER");
         // 플레이어와 배경 멈추기
 
-        SetHeightBG(0f);
-        SetWidthBG(0f);
+        //SetHeightBG(0f);
+        //SetWidthBG(0f);
         // 엔딩 띄우기
         
     }
@@ -60,23 +60,63 @@ public class GameManager : MonoBehaviour
         background_6.SetSpeed(speed);
     }
 
-    [SerializeField] private Player player;
     [SerializeField] private CameraMove cameraMove;
-    public float time;
+    [SerializeField] private Object width_prefab;
+    [SerializeField] private Object height_prefab;
+    public float time=0;
+    private GameObject width;
+    private GameObject height;
+    
+
+    [SerializeField] private GameObject ground;
+    public void RunningToFalling()
+    {
+        
+        background_1.gameObject.SetActive(true);
+        background_2.gameObject.SetActive(true);
+        background_3.gameObject.SetActive(true);
+
+        background_4.gameObject.SetActive(false);
+        background_5.gameObject.SetActive(false);
+        background_6.gameObject.SetActive(false);
+        Destroy(width);
+        ground.SetActive(false);
+    }
+
+    public void FallingToRunning()
+    {
+        
+        background_1.gameObject.SetActive(false);
+        background_2.gameObject.SetActive(false);
+        background_3.gameObject.SetActive(false);
+
+        background_4.gameObject.SetActive(true);
+        background_5.gameObject.SetActive(true);
+        background_6.gameObject.SetActive(true);
+        Destroy(height);
+        ground.SetActive(true);
+    }
+
     private void Update()
     {
+        time += Time.deltaTime;
+        // 1분 30초 경과 시
+        if((int)time%60 >= 15)
+        {
+            print("Timer Over");
+            if(isRunningStage)
+                width = Instantiate(width_prefab, background_4.transform) as GameObject; 
+            else
+                height = Instantiate(height_prefab, background_1.transform) as GameObject;
+            
+            time = 0f;
+        }
+
         // 뛰는 상황
         if(isRunningStage)
         {
             // 세로 맵 멈추기
-            // // 가로 맵 시작
-            // background_1.gameObject.SetActive(false);
-            // background_2.gameObject.SetActive(false);
-            // background_3.gameObject.SetActive(false);
-
-            // background_4.gameObject.SetActive(true);
-            // background_5.gameObject.SetActive(true);
-            // background_6.gameObject.SetActive(true);
+            // 가로 맵 시작
 
             SetHeightBG(0f);
             SetWidthBG(level * 10);
@@ -89,13 +129,6 @@ public class GameManager : MonoBehaviour
             cameraMove.cameraOn = false;
             // 세로 맵 시작
             // 가로 맵 멈추기
-            // background_1.gameObject.SetActive(true);
-            // background_2.gameObject.SetActive(true);
-            // background_3.gameObject.SetActive(true);
-
-            // background_4.gameObject.SetActive(false);
-            // background_5.gameObject.SetActive(false);
-            // background_6.gameObject.SetActive(false);
 
             SetHeightBG(level * 10);
             SetWidthBG(0f);
