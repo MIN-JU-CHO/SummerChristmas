@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject ground;
     public void RunningToFalling()
     {
-        
+        Debug.Log("Run to Fall");
         background_1.gameObject.SetActive(true);
         background_2.gameObject.SetActive(true);
         background_3.gameObject.SetActive(true);
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
 
     public void FallingToRunning()
     {
-        
+        Debug.Log("Fall to run");
         background_1.gameObject.SetActive(false);
         background_2.gameObject.SetActive(false);
         background_3.gameObject.SetActive(false);

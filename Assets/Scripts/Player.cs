@@ -105,14 +105,40 @@ public class Player : MonoBehaviour
             jumpCount = 0;
             IsGrounded = true;
         }
-        else if (collision.gameObject.CompareTag("ChangeStage"))
+        //else if (collision.gameObject.CompareTag("ChangeStage"))
+        //{
+        //    GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
+        //    animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
+        //    if (GameManager.instance.isRunningStage)
+        //    {
+        //        GameManager.instance.FallingToRunning();
+        //    }
+        //    else
+        //    {
+        //        GameManager.instance.RunningToFalling();
+        //        playerRigidbody.velocity = Vector3.zero;
+        //    }
+        //}
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("ChangeStage"))
         {
             GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
             animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
-            if (!GameManager.instance.isRunningStage) playerRigidbody.velocity = Vector3.zero;
+            if (GameManager.instance.isRunningStage)
+            {
+                GameManager.instance.FallingToRunning();
+            }
+            else
+            {
+                GameManager.instance.RunningToFalling();
+                playerRigidbody.velocity = Vector3.zero;
+            }
         }
     }
-    
+
     private void Jump()
     {
         if (Input.GetButtonDown("Jump") && jumpCount < 2)
