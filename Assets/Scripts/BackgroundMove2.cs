@@ -28,7 +28,7 @@ public class BackgroundMove2 : MonoBehaviour
         if(other.gameObject.tag == "Exit")
         {
             print("Trigger Exit");
-            transform.position = new Vector3(-19.2f, 0f, 0f);
+            transform.position = new Vector3(19.2f, 0f, 0f);
             ResetObstacles();
         }
     }
