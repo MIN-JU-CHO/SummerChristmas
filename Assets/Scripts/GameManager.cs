@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
 
     public int level = 1;
+    public float gameSpeed;
+    public bool isRunningStage = true;
 
     private void Awake()
     {

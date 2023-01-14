@@ -15,8 +15,8 @@ public class Player : MonoBehaviour
     /// <summary>
     /// 달리는 스테이지라면 true, 떨어지는 스테이지라면 false
     /// </summary>
-    [SerializeField] bool isRunningStage = true;
-    public bool IsRunningStage
+    bool isRunningStage = true;
+    [property: SerializeField] public bool IsRunningStage
     {
         get { return isRunningStage; }
         set
@@ -26,7 +26,6 @@ public class Player : MonoBehaviour
             animator.SetBool(nameof(isRunningStage), value);
         }
     }
-    Vector3 originScale;
 
     // 지상 필드
     [SerializeField] float jumpForce;
@@ -71,14 +70,13 @@ public class Player : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         animator = GetComponent<Animator>();
-        originScale = transform.localScale;
     }
 
     void Update()
     {
         if (isDead) return;
 
-        if (IsRunningStage)
+        if (GameManager.instance.isRunningStage)
         {
             Jump();
             Sliding();
@@ -109,9 +107,10 @@ public class Player : MonoBehaviour
             jumpCount = 0;
             IsGrounded = true;
         }
-        else if (collision.gameObject.CompareTag("Exit"))
+        else if (collision.gameObject.CompareTag("ChangeStage"))
         {
-            IsRunningStage = !IsRunningStage;
+            GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
+            animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
         }
     }
     
