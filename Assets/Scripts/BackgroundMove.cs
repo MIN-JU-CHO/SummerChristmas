@@ -7,7 +7,7 @@ public class BackgroundMove : MonoBehaviour
     public float speed = 0f;
 
 
-    // 배경 스피드는 플레이어에 따라?
+    // 레벨에 따라 배경 스피드 설정
     public void SetSpeed(float setSpeed)
     {
         speed = setSpeed;
@@ -30,5 +30,14 @@ public class BackgroundMove : MonoBehaviour
     {
         target = new Vector2(transform.position.x, transform.position.y - 0.1f);
         transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Exit")
+        {
+            print("Trigger Exit");
+            transform.position = new Vector3(0f, 10.4f, 0f);
+        }
     }
 }

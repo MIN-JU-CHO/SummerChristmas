@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        
+
         player.isRunningStage=false;
     }
     
@@ -28,14 +28,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackgroundMove background_2;
     [SerializeField] private BackgroundMove background_3;
     
-    [SerializeField] private BackgroundMove background_W;
+    //[SerializeField] private BackgroundMove background_W;
     public void GameOver()
     {
         print("GAME OVER");
         // 플레이어와 배경 멈추기
 
         SetHeightBG(0f);
-        background_W.SetSpeed(0f);
+        //background_W.SetSpeed(0f);
         // 엔딩 띄우기
         
     }
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
             cameraMove.cameraOn = false;
             // 세로 맵 시작
             SetHeightBG(level * 10);
-            background_W.SetSpeed(level * 10);
+            //background_W.SetSpeed(level * 10);
         }
     }
     
