@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Background : MonoBehaviour
 {
-    public float speed = 10f;
+    public float speed = 0f;
 
 
     // 배경 스피드는 플레이어에 따라?
@@ -15,6 +15,11 @@ public class Background : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
+    {
+        
+    }
+
+    public void SetRunningStat()
     {
         
     }
