@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,7 +8,6 @@ public class Player : MonoBehaviour
     // 컴포넌트
     Rigidbody2D playerRigidbody;
     Animator animator;
-    BoxCollider2D boxCollider;
 
     // 게임 전체
     bool isDead = false;
@@ -20,28 +20,87 @@ public class Player : MonoBehaviour
     Vector3 originScale;
 
     // 지상 필드
-    public float jumpForce;
+    [SerializeField] float jumpForce;
     int jumpCount = 0;
     bool isGrounded = false;
 
     // 공중 필드
+    [SerializeField] float playerSpeed;
+    [SerializeField] float dashForce;
+    Vector2 moveVector;
+    float delayBetweenPress = 0.4f;
+    bool isDetectingDash = true;
 
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();
         originScale = transform.localScale;
     }
 
     void Update()
     {
-        boxCollider.size = GetComponent<SpriteRenderer>().bounds.size;
-        InputDetection();
+        if (isDead) return;
+
+        if (isRunningStage)
+        {
+            Jump();
+            Sliding();
+        }
+        Debug.Log(playerRigidbody.velocity);
     }
 
     private void FixedUpdate()
     {
+        if (isRunningStage)
+        {
+
+        }
+        else
+        {
+            moveVector.x = Input.GetAxisRaw("Horizontal");
+            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x * moveVector.x * playerSpeed,
+                playerRigidbody.velocity.y);
+            transform.Translate(playerSpeed * Time.deltaTime * moveVector);
+            if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            jumpCount = 0;
+            isGrounded = true;
+        }
+    }
+    
+    private void Jump()
+    {
+        if (Input.GetButtonDown("Jump") && jumpCount < 2)
+        {
+            isGrounded = false;
+            jumpCount++;
+            playerRigidbody.velocity = Vector2.zero;
+            playerRigidbody.AddForce(new Vector2(0, jumpForce));
+        }
+    }
+
+    private void Sliding()
+    {
+        Debug.Log("Sliding");
+        if (Input.GetButtonDown("Sliding") && jumpCount == 0)
+        {
+            startSliding = ScaleLerp(transform.localScale, new Vector3(transform.localScale.x, transform.localScale.y / 2.0f, 1), 0.5f);
+            //StopCoroutine(stopSliding);
+            StartCoroutine(startSliding);
+        }
+        else if (Input.GetButtonUp("Sliding") && jumpCount == 0)
+        {
+            stopSliding = ScaleLerp(transform.localScale, originScale, 0.5f);
+            StopCoroutine(startSliding);
+            StartCoroutine(stopSliding);
+        }
     }
 
     private void InputDetection()
@@ -52,6 +111,7 @@ public class Player : MonoBehaviour
         {
             if (Input.GetButtonDown("Jump") && jumpCount < 2)
             {
+                isGrounded = false;
                 jumpCount++;
                 playerRigidbody.velocity = Vector2.zero;
                 playerRigidbody.AddForce(new Vector2(0, jumpForce));
@@ -71,7 +131,10 @@ public class Player : MonoBehaviour
         }
         else
         {
-
+            moveVector.x = Input.GetAxisRaw("Horizontal");
+            playerRigidbody.velocity = new Vector2(moveVector.x * playerSpeed, playerRigidbody.velocity.y);
+            transform.Translate(playerSpeed * Time.deltaTime * moveVector);
+            if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
         }
     }
 
@@ -84,5 +147,27 @@ public class Player : MonoBehaviour
             transform.localScale = Vector3.Lerp(startScale, endScale, t / duration);
             yield return null;
         }
+    }
+
+    private IEnumerator DashDetection(float direction)
+    {
+        isDetectingDash = false;
+
+        float t = 0;
+        while (t < delayBetweenPress)
+        {
+            if (t > 0 && Input.GetButtonDown("Horizontal") && Input.GetAxisRaw("Horizontal") == direction)
+            {
+                Debug.Log("Dash");
+                playerRigidbody.AddForce(new Vector2(direction, 0) * dashForce);
+
+                isDetectingDash = true;
+                yield break;
+            }
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        isDetectingDash = true;
     }
 }
