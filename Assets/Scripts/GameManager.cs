@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
         background_3.SetSpeed(speed);
     }
 
+
     private void SetWidthBG(float speed)
     {
         background_4.SetSpeed(speed);
@@ -61,13 +62,22 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Player player;
     [SerializeField] private CameraMove cameraMove;
+    public float time;
     private void Update()
     {
         // 뛰는 상황
         if(isRunningStage)
         {
             // 세로 맵 멈추기
-            // 가로 맵 시작
+            // // 가로 맵 시작
+            // background_1.gameObject.SetActive(false);
+            // background_2.gameObject.SetActive(false);
+            // background_3.gameObject.SetActive(false);
+
+            // background_4.gameObject.SetActive(true);
+            // background_5.gameObject.SetActive(true);
+            // background_6.gameObject.SetActive(true);
+
             SetHeightBG(0f);
             SetWidthBG(level * 10);
             // 카메라는 캐릭터 따라 다니기
@@ -79,9 +89,18 @@ public class GameManager : MonoBehaviour
             cameraMove.cameraOn = false;
             // 세로 맵 시작
             // 가로 맵 멈추기
+            // background_1.gameObject.SetActive(true);
+            // background_2.gameObject.SetActive(true);
+            // background_3.gameObject.SetActive(true);
+
+            // background_4.gameObject.SetActive(false);
+            // background_5.gameObject.SetActive(false);
+            // background_6.gameObject.SetActive(false);
+
             SetHeightBG(level * 10);
             SetWidthBG(0f);
         }
     }
     
+
 }
