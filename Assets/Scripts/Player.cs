@@ -46,8 +46,15 @@ public class Player : MonoBehaviour
         {
             Jump();
             Sliding();
+            playerRigidbody.gravityScale = 1;
         }
-        Debug.Log(playerRigidbody.velocity);
+        else
+        {
+            moveVector.x = Input.GetAxisRaw("Horizontal");
+            transform.Translate(playerSpeed * Time.deltaTime * moveVector);
+            if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
+            playerRigidbody.gravityScale = 0;
+        }
     }
 
     private void FixedUpdate()
@@ -58,11 +65,6 @@ public class Player : MonoBehaviour
         }
         else
         {
-            moveVector.x = Input.GetAxisRaw("Horizontal");
-            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x * moveVector.x * playerSpeed,
-                playerRigidbody.velocity.y);
-            transform.Translate(playerSpeed * Time.deltaTime * moveVector);
-            if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
         }
     }
 
@@ -132,8 +134,7 @@ public class Player : MonoBehaviour
         else
         {
             moveVector.x = Input.GetAxisRaw("Horizontal");
-            playerRigidbody.velocity = new Vector2(moveVector.x * playerSpeed, playerRigidbody.velocity.y);
-            transform.Translate(playerSpeed * Time.deltaTime * moveVector);
+            playerRigidbody.AddForce(new Vector2(moveVector.x * playerSpeed, playerRigidbody.velocity.y));
             if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
         }
     }
