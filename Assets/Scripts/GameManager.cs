@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        FallingToRunning();
     }
     
     [SerializeField] private BackgroundMove background_1;
@@ -79,8 +80,15 @@ public class GameManager : MonoBehaviour
         background_4.gameObject.SetActive(false);
         background_5.gameObject.SetActive(false);
         background_6.gameObject.SetActive(false);
-        Destroy(width);
+        
+        if(width!=null)
+            Destroy(width);
         ground.SetActive(false);
+        
+        // 세로 맵 시작
+        // 가로 맵 멈추기
+        SetHeightBG(level * 10);
+        SetWidthBG(0f);
     }
 
     public void FallingToRunning()
@@ -93,8 +101,15 @@ public class GameManager : MonoBehaviour
         background_4.gameObject.SetActive(true);
         background_5.gameObject.SetActive(true);
         background_6.gameObject.SetActive(true);
-        Destroy(height);
+        
+        if(height!=null)
+            Destroy(height);
         ground.SetActive(true);
+
+        // 세로 맵 멈추기
+        // 가로 맵 시작
+        SetHeightBG(0f);
+        SetWidthBG(level * 10);
     }
 
     private void Update()
@@ -115,11 +130,7 @@ public class GameManager : MonoBehaviour
         // 뛰는 상황
         if(isRunningStage)
         {
-            // 세로 맵 멈추기
-            // 가로 맵 시작
 
-            SetHeightBG(0f);
-            SetWidthBG(level * 10);
             // 카메라는 캐릭터 따라 다니기
             //cameraMove.cameraOn = true;
         }
@@ -127,11 +138,8 @@ public class GameManager : MonoBehaviour
         else
         {
             cameraMove.cameraOn = false;
-            // 세로 맵 시작
-            // 가로 맵 멈추기
+            
 
-            SetHeightBG(level * 10);
-            SetWidthBG(0f);
         }
     }
     
