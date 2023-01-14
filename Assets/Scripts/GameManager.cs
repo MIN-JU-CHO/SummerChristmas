@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-
-        player.isRunningStage=false;
     }
     
     [SerializeField] private BackgroundMove background_1;
@@ -52,7 +50,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // 뛰는 상황
-        if(player.isRunningStage)
+        if(player.IsRunningStage)
         {
             // 세로 맵 멈추기
             SetHeightBG(0f);
