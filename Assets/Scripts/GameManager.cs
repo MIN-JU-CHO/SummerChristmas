@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // 뛰는 상황
-        if(player.IsRunningStage)
+        if(isRunningStage)
         {
             // 세로 맵 멈추기
             SetHeightBG(0f);

@@ -9,23 +9,11 @@ public class Player : MonoBehaviour
     Rigidbody2D playerRigidbody;
     CapsuleCollider2D capsuleCollider;
     Animator animator;
+    SpriteRenderer spriteRenderer;
 
     // 게임 전체
+    [SerializeField] SpriteRenderer dashEffect;
     bool isDead = false;
-    /// <summary>
-    /// 달리는 스테이지라면 true, 떨어지는 스테이지라면 false
-    /// </summary>
-    bool isRunningStage = true;
-    [property: SerializeField] public bool IsRunningStage
-    {
-        get { return isRunningStage; }
-        set
-        {
-            isRunningStage = value;
-            Debug.Log(value);
-            animator.SetBool(nameof(isRunningStage), value);
-        }
-    }
 
     // 지상 필드
     [SerializeField] float jumpForce;
@@ -70,11 +58,20 @@ public class Player : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
     {
         if (isDead) return;
+
+        // for test
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
+            animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
+            if (!GameManager.instance.isRunningStage) playerRigidbody.velocity = Vector3.zero;
+        }
 
         if (GameManager.instance.isRunningStage)
         {
@@ -85,14 +82,15 @@ public class Player : MonoBehaviour
         else
         {
             moveVector.x = Input.GetAxisRaw("Horizontal");
-            if (!isDashing) transform.Translate(playerSpeed * Time.deltaTime * moveVector);
+            if (!isDashing)
+            {
+                transform.Translate(playerSpeed * Time.deltaTime * moveVector);
+                if (moveVector.x < 0) spriteRenderer.flipX = true;
+                else if (moveVector.x > 0) spriteRenderer.flipX = false;
+            }
             if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
             playerRigidbody.gravityScale = 0.0f;
         }
-
-        //if (playerRigidbody.velocity.x > 0) playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x - Time.deltaTime, playerRigidbody.velocity.y);
-        //else if (playerRigidbody.velocity.x < 0) playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x + Time.deltaTime, playerRigidbody.velocity.y);
-        //Debug.Log(playerRigidbody.velocity);
     }
 
     private void LateUpdate()
@@ -111,6 +109,7 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
             animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
+            if (!GameManager.instance.isRunningStage) playerRigidbody.velocity = Vector3.zero;
         }
     }
     
@@ -163,9 +162,17 @@ public class Player : MonoBehaviour
     private IEnumerator Dash(float direction)
     {
         isDashing = true;
+        animator.SetTrigger("Dash");
+
+        dashEffect.transform.position = transform.position;
+        dashEffect.color = new Color(dashEffect.color.r, dashEffect.color.g, dashEffect.color.b, 1.0f);
+        Color color = dashEffect.color;
+
         float t = 0;
         while (t < 0.1f)
         {
+            color.a = Mathf.Lerp(1, 0, (t * 2) / 0.2f);
+            dashEffect.color = color;
             transform.Translate(new Vector2(direction, 0) * dashSpeed * Time.deltaTime);
             t += Time.deltaTime;
             yield return null;
