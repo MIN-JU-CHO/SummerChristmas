@@ -60,11 +60,13 @@ public class Player : MonoBehaviour
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        playerRigidbody.velocity = Vector2.down * jumpForce;
     }
 
     void Update()
     {
         if (isDead) return;
+        Debug.Log(playerRigidbody.velocity);
 
         // for test
         if (Input.GetKeyDown(KeyCode.Q))
@@ -74,12 +76,11 @@ public class Player : MonoBehaviour
             if (!GameManager.instance.isRunningStage) playerRigidbody.velocity = Vector3.zero;
         }
 
-        print($"{GameManager.instance.isRunningStage},{jumpCount}");
         if (GameManager.instance.isRunningStage)
         {
             Jump();
             Sliding();
-            playerRigidbody.gravityScale = 1.0f;
+            spriteRenderer.flipX = false;
         }
         else
         {
@@ -95,11 +96,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -107,20 +103,6 @@ public class Player : MonoBehaviour
             jumpCount = 0;
             IsGrounded = true;
         }
-        //else if (collision.gameObject.CompareTag("ChangeStage"))
-        //{
-        //    GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
-        //    animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
-        //    if (GameManager.instance.isRunningStage)
-        //    {
-        //        GameManager.instance.FallingToRunning();
-        //    }
-        //    else
-        //    {
-        //        GameManager.instance.RunningToFalling();
-        //        playerRigidbody.velocity = Vector3.zero;
-        //    }
-        //}
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -149,9 +131,23 @@ public class Player : MonoBehaviour
         {
             IsGrounded = false;
             jumpCount++;
-            playerRigidbody.velocity = Vector2.zero;
-            playerRigidbody.AddForce(new Vector2(0, jumpForce));
+            StartCoroutine(JumpCoroutine(jumpCount));
         }
+    }
+
+    private IEnumerator JumpCoroutine(int currentJump)
+    {
+        playerRigidbody.velocity = Vector2.up * jumpForce;
+
+        float t = 0;
+        while (t < 0.5f)
+        {
+            t += Time.deltaTime;
+            if (jumpCount == 2 && currentJump != jumpCount) yield break;
+            yield return null;
+        }
+
+        playerRigidbody.velocity = Vector2.down * jumpForce * 1.2f;
     }
 
     private void Sliding()
@@ -194,6 +190,8 @@ public class Player : MonoBehaviour
         isDashing = true;
         animator.SetTrigger("Dash");
 
+        if (direction < 0) dashEffect.GetComponent<SpriteRenderer>().flipX = true;
+        else dashEffect.GetComponent<SpriteRenderer>().flipX = false;
         dashEffect.transform.position = transform.position;
         dashEffect.color = new Color(dashEffect.color.r, dashEffect.color.g, dashEffect.color.b, 1.0f);
         Color color = dashEffect.color;
@@ -203,14 +201,16 @@ public class Player : MonoBehaviour
         {
             color.a = Mathf.Lerp(1, 0, (t * 2) / 0.2f);
             dashEffect.color = color;
-            transform.Translate(new Vector2(direction, 0) * dashSpeed * Time.deltaTime);
+            transform.Translate(dashSpeed * Time.deltaTime * new Vector2(direction, 0));
             t += Time.deltaTime;
             yield return null;
         }
+        color.a = 0;
+        dashEffect.color = color;
         isDashing = false;
     }
 
-    private IEnumerator LinearMove(Vector2 startPos, Vector2 endPos, float duration)
+    public IEnumerator LinearMove(Vector2 startPos, Vector2 endPos, float duration)
     {
         float t = 0;
         while (t < duration)
