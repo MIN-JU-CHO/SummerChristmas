@@ -1,22 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // ÄÄÆ÷³ÍÆ®
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     Rigidbody2D playerRigidbody;
     CapsuleCollider2D capsuleCollider;
     Animator animator;
     SpriteRenderer spriteRenderer;
 
-    // °ÔÀÓ ÀüÃ¼
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
     [SerializeField] SpriteRenderer dashEffect;
     [SerializeField] GameObject credit;
     bool isDead = false;
 
-    // Áö»ó ÇÊµå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½
     [SerializeField] float jumpForce;
     int jumpCount = 0;
     bool isGrounded = false;
@@ -46,7 +45,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    // °øÁß ÇÊµå
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½
     [SerializeField] float playerSpeed;
     [SerializeField] float dashSpeed;
     Vector2 moveVector;
