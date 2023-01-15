@@ -1880,7 +1880,7 @@ SpriteRenderer:
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 4b2f3cea6027a8d4a929449049245655, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -2134,6 +2134,7 @@ MonoBehaviour:
   level: 1
   gameSpeed: 0
   isRunningStage: 1
+  stageDelayTime: 2
   background_1: {fileID: 236434719}
   background_2: {fileID: 163203092}
   background_3: {fileID: 1607312946}
