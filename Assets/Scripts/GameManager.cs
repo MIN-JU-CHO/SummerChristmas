@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour
         background_5.gameObject.SetActive(false);
         background_6.gameObject.SetActive(false);
         
-        background_4.Transite(-1);
+        background_5.Transite(-1);
 
         // 세로 맵 시작
         // 가로 맵 멈추기
@@ -126,12 +126,17 @@ public class GameManager : MonoBehaviour
         background_5.gameObject.SetActive(true);
         background_6.gameObject.SetActive(true);
 
-        background_1.Transite(-1);
+        background_2.Transite(-1);
 
         // 세로 맵 멈추기
         // 가로 맵 시작
         SetWidthBG(level * 10);
     }
+
+    private void transiteBG2()
+    {
+        background_2.Transite(1);
+    } 
 
     private void Update()
     {
@@ -143,11 +148,11 @@ public class GameManager : MonoBehaviour
             print("Map Change");
             if(isRunningStage)
             {
-                background_4.Transite(1);
+                background_5.Transite(1);
             }
             else
             {
-                background_1.Transite(1);
+                Invoke("transiteBG2", 0.5f);
             }
             time2=0f;
         }
