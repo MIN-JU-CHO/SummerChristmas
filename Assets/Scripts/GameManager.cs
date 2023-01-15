@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                height = Instantiate(height_prefab, background_1.transform) as GameObject;
+                height = Instantiate(height_prefab, background_2.transform) as GameObject;
             }
             
             time = 0f;
