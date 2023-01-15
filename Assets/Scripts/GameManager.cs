@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public float gameSpeed;
     public bool isRunningStage = true;
 
+    float stageDelayTime = 2.0f;
+
     private void Awake()
     {
         if(instance == null)
@@ -22,7 +24,6 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        FallingToRunning();
     }
     
     [SerializeField] private BackgroundMove background_1;
@@ -70,9 +71,22 @@ public class GameManager : MonoBehaviour
     
 
     [SerializeField] private GameObject ground;
-    public void RunningToFalling()
+    public IEnumerator RunningToFalling()
     {
         Debug.Log("Run to Fall");
+        
+        if(width!=null)
+            Destroy(width);
+        ground.SetActive(false);
+
+        float t = 0;
+        while (t < stageDelayTime)
+        {
+            SetWidthBG(Mathf.Lerp(level * 10, 0, t / stageDelayTime));
+            t += Time.deltaTime;
+            yield return null;
+        }
+
         background_1.gameObject.SetActive(true);
         background_2.gameObject.SetActive(true);
         background_3.gameObject.SetActive(true);
@@ -80,20 +94,28 @@ public class GameManager : MonoBehaviour
         background_4.gameObject.SetActive(false);
         background_5.gameObject.SetActive(false);
         background_6.gameObject.SetActive(false);
-        
-        if(width!=null)
-            Destroy(width);
-        ground.SetActive(false);
-        
+
         // 세로 맵 시작
         // 가로 맵 멈추기
         SetHeightBG(level * 10);
-        SetWidthBG(0f);
     }
 
-    public void FallingToRunning()
+    public IEnumerator FallingToRunning()
     {
         Debug.Log("Fall to run");
+        
+        if(height!=null)
+            Destroy(height);
+        ground.SetActive(true);
+
+        float t = 0;
+        while (t < stageDelayTime)
+        {
+            SetHeightBG(Mathf.Lerp(level * 10, 0, t /stageDelayTime));
+            t += Time.deltaTime;
+            yield return null;
+        }
+
         background_1.gameObject.SetActive(false);
         background_2.gameObject.SetActive(false);
         background_3.gameObject.SetActive(false);
@@ -101,14 +123,9 @@ public class GameManager : MonoBehaviour
         background_4.gameObject.SetActive(true);
         background_5.gameObject.SetActive(true);
         background_6.gameObject.SetActive(true);
-        
-        if(height!=null)
-            Destroy(height);
-        ground.SetActive(true);
 
         // 세로 맵 멈추기
         // 가로 맵 시작
-        SetHeightBG(0f);
         SetWidthBG(level * 10);
     }
 

@@ -129,11 +129,11 @@ public class Player : MonoBehaviour
             animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
             if (GameManager.instance.isRunningStage)
             {
-                GameManager.instance.FallingToRunning();
+                StartCoroutine(GameManager.instance.FallingToRunning());
             }
             else
             {
-                GameManager.instance.RunningToFalling();
+                StartCoroutine(GameManager.instance.RunningToFalling());
                 playerRigidbody.velocity = Vector3.zero;
             }
         }

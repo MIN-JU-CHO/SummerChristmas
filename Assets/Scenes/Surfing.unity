@@ -869,7 +869,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &272802541
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1822,7 +1822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57daf166451ad54284c1b8e78a15838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 10
   locations_obs:
   - {fileID: 1025487892}
   - {fileID: 1582092196}
@@ -3828,6 +3828,10 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2568048092020072849, guid: b050d96396c77614aa2ce5797e7b99cb, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2568048092020072850, guid: b050d96396c77614aa2ce5797e7b99cb, type: 3}
       propertyPath: m_SortingOrder
       value: 1
@@ -3838,7 +3842,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2568048092020072851, guid: b050d96396c77614aa2ce5797e7b99cb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -6
       objectReference: {fileID: 0}
     - target: {fileID: 2568048092020072851, guid: b050d96396c77614aa2ce5797e7b99cb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3880,6 +3884,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2568048092020072863, guid: b050d96396c77614aa2ce5797e7b99cb, type: 3}
+      propertyPath: dashEffect
+      value: 
+      objectReference: {fileID: 325102809}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b050d96396c77614aa2ce5797e7b99cb, type: 3}
 --- !u!1 &1708789072
@@ -4340,7 +4348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57daf166451ad54284c1b8e78a15838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 10
   locations_obs:
   - {fileID: 47014497}
   - {fileID: 497597400}
@@ -5041,7 +5049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57daf166451ad54284c1b8e78a15838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  speed: 10
   locations_obs:
   - {fileID: 1513392623}
   - {fileID: 1195513382}
