@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackgroundMove background_1;
     [SerializeField] private BackgroundMove background_2;
     [SerializeField] private BackgroundMove background_3;
+    [SerializeField] private BackgroundMove background_7;
+    [SerializeField] private BackgroundMove background_8;
 
     
     [SerializeField] private BackgroundMove2 background_4;
@@ -52,6 +54,8 @@ public class GameManager : MonoBehaviour
         background_1.SetSpeed(speed);
         background_2.SetSpeed(speed);
         background_3.SetSpeed(speed);
+        background_7.SetSpeed(speed);
+        background_8.SetSpeed(speed);
     }
 
 
@@ -90,6 +94,8 @@ public class GameManager : MonoBehaviour
         background_1.gameObject.SetActive(true);
         background_2.gameObject.SetActive(true);
         background_3.gameObject.SetActive(true);
+        background_7.gameObject.SetActive(true);
+        background_8.gameObject.SetActive(true);
 
         background_4.gameObject.SetActive(false);
         background_5.gameObject.SetActive(false);
@@ -121,6 +127,8 @@ public class GameManager : MonoBehaviour
         background_1.gameObject.SetActive(false);
         background_2.gameObject.SetActive(false);
         background_3.gameObject.SetActive(false);
+        background_7.gameObject.SetActive(false);
+        background_8.gameObject.SetActive(false);
 
         background_4.gameObject.SetActive(true);
         background_5.gameObject.SetActive(true);
