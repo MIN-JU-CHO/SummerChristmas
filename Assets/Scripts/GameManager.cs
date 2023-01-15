@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CameraMove cameraMove;
     [SerializeField] private Object width_prefab;
     [SerializeField] private Object height_prefab;
-    public float time=0;
+    public float time=0, time2=0;
     private GameObject width;
     private GameObject height;
     
@@ -94,6 +94,8 @@ public class GameManager : MonoBehaviour
         background_4.gameObject.SetActive(false);
         background_5.gameObject.SetActive(false);
         background_6.gameObject.SetActive(false);
+        
+        background_4.Transite(-1);
 
         // 세로 맵 시작
         // 가로 맵 멈추기
@@ -124,6 +126,8 @@ public class GameManager : MonoBehaviour
         background_5.gameObject.SetActive(true);
         background_6.gameObject.SetActive(true);
 
+        background_1.Transite(-1);
+
         // 세로 맵 멈추기
         // 가로 맵 시작
         SetWidthBG(level * 10);
@@ -132,16 +136,37 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         time += Time.deltaTime;
+        time2 += Time.deltaTime;
+
+        if((int)time2%60 >= 14)
+        {
+            print("Map Change");
+            if(isRunningStage)
+            {
+                background_4.Transite(1);
+            }
+            else
+            {
+                background_1.Transite(1);
+            }
+            time2=0f;
+        }
+
         // 1분 30초 경과 시
         if((int)time%60 >= 15)
         {
             print("Timer Over");
             if(isRunningStage)
-                width = Instantiate(width_prefab, background_4.transform) as GameObject; 
+            {
+                width = Instantiate(width_prefab, background_4.transform) as GameObject;
+            }
             else
+            {
                 height = Instantiate(height_prefab, background_1.transform) as GameObject;
+            }
             
             time = 0f;
+            time2=0f;
         }
 
         // 뛰는 상황

@@ -77,4 +77,20 @@ public class BackgroundMove2 : MonoBehaviour
             array[rand2] = temp;
         }
     }
+
+    [SerializeField] private GameObject ground;
+    [SerializeField] private GameObject toFalling;
+    public void Transite(int i)
+    {
+        if(i==1)
+        {
+            toFalling.SetActive(true);
+            ground.SetActive(false);
+        }
+        else
+        {
+            toFalling.SetActive(false);
+            ground.SetActive(true);
+        }
+    }
 }
