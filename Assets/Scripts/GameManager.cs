@@ -127,6 +127,7 @@ public class GameManager : MonoBehaviour
         background_6.gameObject.SetActive(true);
 
         background_2.Transite(-1);
+        background_3.Transite(-1);
 
         // 세로 맵 멈추기
         // 가로 맵 시작
@@ -136,6 +137,7 @@ public class GameManager : MonoBehaviour
     private void transiteBG2()
     {
         background_2.Transite(1);
+        background_3.Transite(1);
     } 
 
     private void Update()
