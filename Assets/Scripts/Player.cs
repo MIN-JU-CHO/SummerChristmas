@@ -73,7 +73,6 @@ public class Player : MonoBehaviour
             if (!GameManager.instance.isRunningStage) playerRigidbody.velocity = Vector3.zero;
         }
 
-        print($"{GameManager.instance.isRunningStage},{playerRigidbody.velocity}");
         if (GameManager.instance.isRunningStage)
         {
             Jump();
