@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public float gameSpeed;
     public bool isRunningStage = true;
 
-    float stageDelayTime = 2.0f;
+    public float stageDelayTime = 2.0f;
 
     private void Awake()
     {

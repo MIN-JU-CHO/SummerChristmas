@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -131,10 +132,12 @@ public class Player : MonoBehaviour
             if (GameManager.instance.isRunningStage)
             {
                 StartCoroutine(GameManager.instance.FallingToRunning());
+                StartCoroutine(LinearMove(transform.position, new Vector2(-6, 0), GameManager.instance.stageDelayTime));
             }
             else
             {
                 StartCoroutine(GameManager.instance.RunningToFalling());
+                StartCoroutine(LinearMove(transform.position, new Vector2(1, 3.5f), GameManager.instance.stageDelayTime));
                 playerRigidbody.velocity = Vector3.zero;
             }
         }
@@ -205,5 +208,16 @@ public class Player : MonoBehaviour
             yield return null;
         }
         isDashing = false;
+    }
+
+    private IEnumerator LinearMove(Vector2 startPos, Vector2 endPos, float duration)
+    {
+        float t = 0;
+        while (t < duration)
+        {
+            transform.position = Vector2.Lerp(startPos, endPos, t / duration);
+            t += Time.deltaTime;
+            yield return null;
+        }
     }
 }
