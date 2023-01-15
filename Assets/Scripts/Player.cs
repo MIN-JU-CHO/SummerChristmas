@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
 
     // 게임 전체
     [SerializeField] SpriteRenderer dashEffect;
+    [SerializeField] GameObject credit;
     bool isDead = false;
 
     // 지상 필드
@@ -124,6 +125,11 @@ public class Player : MonoBehaviour
                 StartCoroutine(LinearMove(transform.position, new Vector2(1, 3.5f), GameManager.instance.stageDelayTime));
                 playerRigidbody.velocity = Vector3.zero;
             }
+        }
+        else if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            credit.SetActive(true);
+            isDead = true;
         }
     }
 
