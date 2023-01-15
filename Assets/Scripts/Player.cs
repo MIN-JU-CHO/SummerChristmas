@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
             Jump();
             Sliding();
             spriteRenderer.flipX = false;
+            playerRigidbody.gravityScale = 1.0f;
         }
         else
         {
@@ -92,6 +93,7 @@ public class Player : MonoBehaviour
                 else if (moveVector.x > 0) spriteRenderer.flipX = false;
             }
             if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
+            playerRigidbody.velocity = Vector2.zero;
             playerRigidbody.gravityScale = 0.0f;
         }
     }
@@ -147,7 +149,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
 
-        playerRigidbody.velocity = Vector2.down * jumpForce * 1.2f;
+        playerRigidbody.velocity = Vector2.down * jumpForce * 1.1f;
     }
 
     private void Sliding()
