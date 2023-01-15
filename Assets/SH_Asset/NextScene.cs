@@ -13,7 +13,6 @@ public class NextScene : MonoBehaviour
 
     private void Update()
     {
-        print(op1+ " " + op2 + " " + op3);
         if (Input.anyKeyDown)
         {
             if (!keyPressed)
@@ -48,10 +47,11 @@ public class NextScene : MonoBehaviour
         asyncOperation.allowSceneActivation = false;
 
         float t = 0;
-        while (t < 1.0f)
+        float duration = 2.0f;
+        while (t < duration)
         {
             t += Time.deltaTime;
-            op3.GetComponent<CanvasRenderer>().SetAlpha(1.0f - t / 1.0f);
+            op3.GetComponent<CanvasRenderer>().SetAlpha(1.0f - t / duration);
             
             yield return null;
         }
