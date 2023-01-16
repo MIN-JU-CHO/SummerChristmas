@@ -89,20 +89,20 @@ public class BackgroundMove : MonoBehaviour
         {
             toRunning.SetActive(true);
             ground.SetActive(false);
-            temp_locations[0] = locations_obs[1];
-            temp_locations[1] = locations_obs[4];
-            temp_locations[2] = locations_obs[7];
-            locations_obs[1].position = new Vector3(-1000, -1000, 0);
-            locations_obs[4].position = new Vector3(-1000, -1000, 0);
+            temp_locations[0] = locations_obs[6];
+            temp_locations[1] = locations_obs[7];
+            temp_locations[2] = locations_obs[8];
+            locations_obs[6].position = new Vector3(-1000, -1000, 0);
             locations_obs[7].position = new Vector3(-1000, -1000, 0);
+            locations_obs[8].position = new Vector3(-1000, -1000, 0);
         }
         else
         {
             toRunning.SetActive(false);
             ground.SetActive(true);
-            temp_locations[1] = locations_obs[0];
-            temp_locations[4] = locations_obs[1];
-            temp_locations[7] = locations_obs[2];
+            locations_obs[6] = temp_locations[0];
+            locations_obs[7] = temp_locations[1];
+            locations_obs[8] = temp_locations[2];
         }
     }
 }
