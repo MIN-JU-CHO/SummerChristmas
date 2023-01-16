@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
 
     public void ClickedReplay()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene("Title");
     }
 
     private void SetHeightBG(float speed)
