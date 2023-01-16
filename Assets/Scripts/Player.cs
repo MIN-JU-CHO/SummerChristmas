@@ -127,6 +127,7 @@ public class Player : MonoBehaviour
         else if (collision.gameObject.CompareTag("Obstacle"))
         {
             credit.SetActive(true);
+            GameManager.instance.GameOver();
             isDead = true;
         }
     }

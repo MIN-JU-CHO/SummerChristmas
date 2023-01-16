@@ -81,17 +81,28 @@ public class BackgroundMove : MonoBehaviour
     
     [SerializeField] private GameObject ground;
     [SerializeField] private GameObject toRunning;
+    
+    private Transform[] temp_locations = new Transform [3];
     public void Transite(int i)
     {
         if(i==1)
         {
             toRunning.SetActive(true);
             ground.SetActive(false);
+            temp_locations[0] = locations_obs[1];
+            temp_locations[1] = locations_obs[4];
+            temp_locations[2] = locations_obs[7];
+            locations_obs[1].position = new Vector3(-1000, -1000, 0);
+            locations_obs[4].position = new Vector3(-1000, -1000, 0);
+            locations_obs[7].position = new Vector3(-1000, -1000, 0);
         }
         else
         {
             toRunning.SetActive(false);
             ground.SetActive(true);
+            temp_locations[1] = locations_obs[0];
+            temp_locations[4] = locations_obs[1];
+            temp_locations[7] = locations_obs[2];
         }
     }
 }

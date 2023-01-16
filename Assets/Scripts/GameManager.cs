@@ -37,10 +37,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private BackgroundMove2 background_5;
     [SerializeField] private BackgroundMove2 background_6;
     
-    //[SerializeField] private BackgroundMove background_W;
+    [SerializeField] private GameObject replay;
     public void GameOver()
     {
         print("GAME OVER");
+        replay.SetActive(true);
         // 플레이어와 배경 멈추기
 
         //SetHeightBG(0f);
