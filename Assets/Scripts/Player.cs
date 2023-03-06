@@ -21,10 +21,7 @@ public class Player : MonoBehaviour
     bool isGrounded = false;
     private bool IsGrounded
     {
-        get
-        {
-            return isGrounded;
-        }
+        get => isGrounded;
         set
         {
             isGrounded = value;
@@ -34,10 +31,7 @@ public class Player : MonoBehaviour
     bool isSliding = false;
     private bool IsSliding
     {
-        get
-        {
-            return isSliding;
-        }
+        get => isSliding;
         set
         {
             isSliding = value;
@@ -68,14 +62,14 @@ public class Player : MonoBehaviour
         Debug.Log(playerRigidbody.velocity);
 
         // for test
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
-            animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
-            if (!GameManager.instance.isRunningStage) playerRigidbody.velocity = Vector3.zero;
-        }
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //     GameManager.instance.IsRunningStage = !GameManager.instance.IsRunningStage;
+        //     animator.SetBool("IsRunningStage", GameManager.instance.IsRunningStage);
+        //     if (!GameManager.instance.IsRunningStage) playerRigidbody.velocity = Vector3.zero;
+        // }
 
-        if (GameManager.instance.isRunningStage)
+        if (GameManager.CurrentGameState == GameState.Running)
         {
             Jump();
             Sliding();
@@ -106,30 +100,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("ChangeStage"))
-        {
-            GameManager.instance.isRunningStage = !GameManager.instance.isRunningStage;
-            animator.SetBool("isRunningStage", GameManager.instance.isRunningStage);
-            if (GameManager.instance.isRunningStage)
-            {
-                StartCoroutine(GameManager.instance.FallingToRunning());
-                StartCoroutine(LinearMove(transform.position, new Vector2(-6, 0), GameManager.instance.stageDelayTime));
-            }
-            else
-            {
-                StartCoroutine(GameManager.instance.RunningToFalling());
-                StartCoroutine(LinearMove(transform.position, new Vector2(1, 3.5f), GameManager.instance.stageDelayTime));
-                playerRigidbody.velocity = Vector3.zero;
-            }
-        }
-        else if (collision.gameObject.CompareTag("Obstacle"))
-        {
-            credit.SetActive(true);
-            isDead = true;
-        }
-    }
+    // private void OnTriggerEnter2D(Collider2D collision)
+    // {
+    //     if (collision.gameObject.CompareTag("ChangeStage"))
+    //     {
+    //         GameManager.instance.IsRunningStage = !GameManager.instance.IsRunningStage;
+    //         animator.SetBool("IsRunningStage", GameManager.instance.IsRunningStage);
+    //         if (GameManager.instance.IsRunningStage)
+    //         {
+    //             StartCoroutine(GameManager.instance.FallingToRunning());
+    //             StartCoroutine(LinearMove(transform.position, new Vector2(-6, 0), GameManager.instance.stageDelayTime));
+    //         }
+    //         else
+    //         {
+    //             StartCoroutine(GameManager.instance.RunningToFalling());
+    //             StartCoroutine(LinearMove(transform.position, new Vector2(1, 3.5f), GameManager.instance.stageDelayTime));
+    //             playerRigidbody.velocity = Vector3.zero;
+    //         }
+    //     }
+    //     else if (collision.gameObject.CompareTag("Obstacle"))
+    //     {
+    //         credit.SetActive(true);
+    //         isDead = true;
+    //     }
+    // }
 
     private void Jump()
     {

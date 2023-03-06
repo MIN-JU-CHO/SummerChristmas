@@ -344,6 +344,8 @@ MonoBehaviour:
   - {fileID: 6255206321489224856, guid: 6d02acb3329b3be40b89634d51f0d9fe, type: 3}
   - {fileID: 1861397525833752675, guid: 9a3bd078cce6a3e46a45a7fc9675c51f, type: 3}
   group: {fileID: 1439383779310007696}
+  ground: {fileID: 0}
+  toRunning: {fileID: 0}
 --- !u!61 &1439383779248419620
 BoxCollider2D:
   m_ObjectHideFlags: 0

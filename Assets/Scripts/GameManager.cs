@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GameState
+{
+    Running,
+    Falling
+};
+
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager instance = null;
+    public static readonly float durationOfStage = 180;
 
-    public int level = 1;
-    public float gameSpeed;
-    public bool isRunningStage = true;
-
+    public static int Level { get; private set; } = 1;
+    public static int BackgroundPerStage => (Level * 10 + 40);
+    public static float MoveSpeed => 5f;
+    public static GameState CurrentGameState { get; set; } = GameState.Running;
     public float stageDelayTime = 2.0f;
 
     private void Awake()
@@ -26,16 +33,16 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    [SerializeField] private BackgroundMove background_1;
-    [SerializeField] private BackgroundMove background_2;
-    [SerializeField] private BackgroundMove background_3;
-    [SerializeField] private BackgroundMove background_7;
-    [SerializeField] private BackgroundMove background_8;
+    [SerializeField] BackgroundMove background_1;
+    [SerializeField] BackgroundMove background_2;
+    [SerializeField] BackgroundMove background_3;
+    [SerializeField] BackgroundMove background_7;
+    [SerializeField] BackgroundMove background_8;
 
     
-    [SerializeField] private BackgroundMove2 background_4;
-    [SerializeField] private BackgroundMove2 background_5;
-    [SerializeField] private BackgroundMove2 background_6;
+    [SerializeField] BackgroundMove2 background_4;
+    [SerializeField] BackgroundMove2 background_5;
+    [SerializeField] BackgroundMove2 background_6;
     
     //[SerializeField] private BackgroundMove background_W;
     public void GameOver()
@@ -86,7 +93,7 @@ public class GameManager : MonoBehaviour
         float t = 0;
         while (t < stageDelayTime)
         {
-            SetWidthBG(Mathf.Lerp(level * 10, 0, t / stageDelayTime));
+            SetWidthBG(Mathf.Lerp(Level * 10, 0, t / stageDelayTime));
             t += Time.deltaTime;
             yield return null;
         }
@@ -105,7 +112,7 @@ public class GameManager : MonoBehaviour
 
         // 세로 맵 시작
         // 가로 맵 멈추기
-        SetHeightBG(level * 10);
+        SetHeightBG(Level * 10);
     }
 
     public IEnumerator FallingToRunning()
@@ -119,7 +126,7 @@ public class GameManager : MonoBehaviour
         float t = 0;
         while (t < stageDelayTime)
         {
-            SetHeightBG(Mathf.Lerp(level * 10, 0, t /stageDelayTime));
+            SetHeightBG(Mathf.Lerp(Level * 10, 0, t /stageDelayTime));
             t += Time.deltaTime;
             yield return null;
         }
@@ -139,7 +146,7 @@ public class GameManager : MonoBehaviour
 
         // 세로 맵 멈추기
         // 가로 맵 시작
-        SetWidthBG(level * 10);
+        SetWidthBG(Level * 10);
     }
 
     private void transiteBG2()
@@ -156,7 +163,7 @@ public class GameManager : MonoBehaviour
         if((int)time2%60 >= 14)
         {
             print("Map Change");
-            if(isRunningStage)
+            if(CurrentGameState is GameState.Running)
             {
                 background_5.Transite(1);
             }
@@ -171,7 +178,7 @@ public class GameManager : MonoBehaviour
         if((int)time%60 >= 15)
         {
             print("Timer Over");
-            if(isRunningStage)
+            if(CurrentGameState is GameState.Running)
             {
                 width = Instantiate(width_prefab, background_4.transform) as GameObject;
             }
@@ -185,7 +192,7 @@ public class GameManager : MonoBehaviour
         }
 
         // 뛰는 상황
-        if(isRunningStage)
+        if(CurrentGameState is GameState.Running)
         {
 
             // 카메라는 캐릭터 따라 다니기
