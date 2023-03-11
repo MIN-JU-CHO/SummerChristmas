@@ -9,7 +9,7 @@ public class Background : MonoBehaviour
 
     [SerializeField] int backgroundNumber = 1;
     private bool IsSwitchingBackground => backgroundNumber == GameManager.BackgroundPerStage;
-    private bool IsNextBackgroundSwitching => backgroundNumber + 1 == GameManager.BackgroundPerStage;
+    private bool IsBeforeSwitchingBackground => backgroundNumber + 1 == GameManager.BackgroundPerStage;
     
     [SerializeField] GameObject runningCloud;
     [SerializeField] GameObject runningToFallingCloud;
@@ -48,11 +48,13 @@ public class Background : MonoBehaviour
     {
         if (spriteRenderer.bounds.max.x <= screenLeft)
         {
-            if (IsNextBackgroundSwitching)
+            if (IsBeforeSwitchingBackground)
             {
                 transform.Translate(Vector3.right * (spriteRenderer.bounds.size.x));
                 transform.Translate(Vector3.down * (spriteRenderer.bounds.size.y));
+                
                 backgroundNumber = 1;
+                
                 runningCloud.SetActive(false);
                 fallingCloud.SetActive(true);
                 GameManager.RunningToFalling();
@@ -60,15 +62,18 @@ public class Background : MonoBehaviour
             else
             {
                 GoRight();
+                // spawn obstacle
             }
         }
         if (spriteRenderer.bounds.min.y >= screenUp)
         {
-            if (IsNextBackgroundSwitching)
+            if (IsBeforeSwitchingBackground)
             {
                 transform.Translate(Vector3.right * (spriteRenderer.bounds.size.x));
                 transform.Translate(Vector3.down * (spriteRenderer.bounds.size.y));
+                
                 backgroundNumber = 1;
+                
                 runningCloud.SetActive(true);
                 fallingCloud.SetActive(false);
                 GameManager.FallingToRunning();
@@ -76,6 +81,7 @@ public class Background : MonoBehaviour
             else
             {
                 GoBelow();
+                // spawn obstacle
             }
         }
     }
