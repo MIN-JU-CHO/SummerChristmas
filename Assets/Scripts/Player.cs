@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         set
         {
             isGrounded = value;
-            animator.SetBool(nameof(isGrounded), value);
+            animator.SetBool(nameof(IsGrounded), value);
         }
     }
     bool isSliding = false;
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
         set
         {
             isSliding = value;
-            animator.SetBool(nameof(isSliding), value);
+            animator.SetBool(nameof(IsSliding), value);
         }
     }
 
@@ -59,7 +59,6 @@ public class Player : MonoBehaviour
     void Update()
     {
         if (isDead) return;
-        Debug.Log(playerRigidbody.velocity);
 
         // for test
         // if (Input.GetKeyDown(KeyCode.Q))
@@ -147,7 +146,7 @@ public class Player : MonoBehaviour
             yield return null;
         }
 
-        playerRigidbody.velocity = Vector2.down * jumpForce * 1.1f;
+        playerRigidbody.velocity = Vector2.down * (jumpForce * 1.1f);
     }
 
     private void Sliding()

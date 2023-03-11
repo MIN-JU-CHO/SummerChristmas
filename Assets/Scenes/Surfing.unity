@@ -632,6 +632,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1466595143}
     m_Modifications:
+    - target: {fileID: 5030515341428106895, guid: 667a74061253b454699b272a140131b5, type: 3}
+      propertyPath: backgroundNumber
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7762782130682243622, guid: 667a74061253b454699b272a140131b5, type: 3}
       propertyPath: m_Name
       value: BackgroundRunning (1)
