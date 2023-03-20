@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Background : MonoBehaviour
@@ -31,16 +33,19 @@ public class Background : MonoBehaviour
 
     private void ScrollBackground()
     {
-        switch (GameManager.CurrentGameState)
+        if (GameManager.IsScrolling)
         {
-            case GameState.Running:
-                transform.Translate(Vector3.left * (GameManager.MoveSpeed * Time.fixedDeltaTime));
-                break;
-            case GameState.Falling:
-                transform.Translate(Vector3.up * (GameManager.MoveSpeed * Time.fixedDeltaTime));
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
+            switch (GameManager.CurrentGameState)
+            {
+                case GameState.Running:
+                    transform.Translate(Vector3.left * (GameManager.MoveSpeed * Time.fixedDeltaTime));
+                    break;
+                case GameState.Falling:
+                    transform.Translate(Vector3.up * (GameManager.MoveSpeed * Time.fixedDeltaTime));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 
@@ -57,7 +62,8 @@ public class Background : MonoBehaviour
                 
                 runningCloud.SetActive(false);
                 fallingCloud.SetActive(true);
-                GameManager.RunningToFalling();
+
+                GameManager.RunningToFalling().Forget();
             }
             else
             {
@@ -77,6 +83,7 @@ public class Background : MonoBehaviour
                 runningCloud.SetActive(true);
                 fallingCloud.SetActive(false);
                 GameManager.FallingToRunning();
+
             }
             else
             {

@@ -1,5 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -19,10 +23,10 @@ public class Player : MonoBehaviour
     [SerializeField] float jumpForce;
     int jumpCount = 0;
     bool isGrounded = false;
-    private bool IsGrounded
+    public bool IsGrounded
     {
         get => isGrounded;
-        set
+        private set
         {
             isGrounded = value;
             animator.SetBool(nameof(IsGrounded), value);
@@ -39,6 +43,8 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool IsReadyToFalling => transform.position.x >= 0;
+
     // ���� �ʵ�
     [SerializeField] float playerSpeed;
     [SerializeField] float dashSpeed;
@@ -47,17 +53,27 @@ public class Player : MonoBehaviour
     bool isDetectingDash = true;
     bool isDashing = false;
 
-    void Start()
+    private void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        playerRigidbody.velocity = Vector2.down * jumpForce;
     }
 
-    void Update()
+    private void Start()
     {
+        playerRigidbody.velocity = Vector2.down * jumpForce;
+        spriteRenderer.flipX = false;
+        playerRigidbody.gravityScale = 1.0f;
+    }
+
+    private void Update()
+    {
+        #if UNITY_EDITOR
+        UnitTest();
+        #endif
+        
         if (isDead) return;
 
         // for test
@@ -70,10 +86,8 @@ public class Player : MonoBehaviour
 
         if (GameManager.CurrentGameState == GameState.Running)
         {
-            Jump();
-            Sliding();
-            spriteRenderer.flipX = false;
-            playerRigidbody.gravityScale = 1.0f;
+            DetectJump();
+            DetectSliding();
         }
         else
         {
@@ -85,8 +99,15 @@ public class Player : MonoBehaviour
                 else if (moveVector.x > 0) spriteRenderer.flipX = false;
             }
             if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
-            playerRigidbody.velocity = Vector2.zero;
-            playerRigidbody.gravityScale = 0.0f;
+        }
+    }
+
+    private void UnitTest()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            playerRigidbody.MovePosition(playerRigidbody.position +
+                                         Vector2.right * (GameManager.MoveSpeed * Time.deltaTime));
         }
     }
 
@@ -124,19 +145,26 @@ public class Player : MonoBehaviour
     //     }
     // }
 
-    private void Jump()
+    private void DetectJump()
     {
-        if (Input.GetButtonDown("Jump") && jumpCount < 2)
+        if (Input.GetButtonDown("Jump"))
         {
-            IsGrounded = false;
-            jumpCount++;
-            StartCoroutine(JumpCoroutine(jumpCount));
+            Jump();
         }
     }
 
-    private IEnumerator JumpCoroutine(int currentJump)
+    private void Jump()
     {
-        playerRigidbody.velocity = Vector2.up * jumpForce;
+        if (jumpCount >= 2) return;
+        
+        IsGrounded = false;
+        jumpCount++;
+        StartCoroutine(CoJump(jumpCount));
+    }
+
+    private IEnumerator CoJump(int currentJump)
+    {
+        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, jumpForce);
 
         float t = 0;
         while (t < 0.5f)
@@ -146,10 +174,10 @@ public class Player : MonoBehaviour
             yield return null;
         }
 
-        playerRigidbody.velocity = Vector2.down * (jumpForce * 1.1f);
+        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, -(jumpForce * 1.1f));
     }
 
-    private void Sliding()
+    private void DetectSliding()
     {
         if (Input.GetButtonDown("Sliding") && jumpCount == 0)
         {
@@ -209,14 +237,30 @@ public class Player : MonoBehaviour
         isDashing = false;
     }
 
-    public IEnumerator LinearMove(Vector2 startPos, Vector2 endPos, float duration)
+    public void RunningToFalling()
     {
-        float t = 0;
-        while (t < duration)
-        {
-            transform.position = Vector2.Lerp(startPos, endPos, t / duration);
-            t += Time.deltaTime;
-            yield return null;
-        }
+        playerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerRigidbody.DOMove(new Vector2(0, 3.5f), 6f / GameManager.MoveSpeed).SetEase(Ease.Linear);
+        IsGrounded = false;
+    }
+
+    public void FallingToRunning()
+    {
+        spriteRenderer.flipX = false;
+        playerRigidbody.gravityScale = 1.0f;
+    }
+
+    public void SetRunningAttribute()
+    {
+        spriteRenderer.flipX = false;
+        playerRigidbody.gravityScale = 1.0f;
+        animator.SetBool("IsRunningStage", true);
+    }
+    
+    public void SetFallingAttribute()
+    {
+        playerRigidbody.velocity = Vector3.zero;
+        playerRigidbody.gravityScale = 0;
+        animator.SetBool("IsRunningStage", false);
     }
 }
