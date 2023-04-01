@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] float jumpForce;
     int jumpCount = 0;
     bool isGrounded = false;
+
     public bool IsGrounded
     {
         get => isGrounded;
@@ -32,7 +33,9 @@ public class Player : MonoBehaviour
             animator.SetBool(nameof(IsGrounded), value);
         }
     }
+
     bool isSliding = false;
+
     private bool IsSliding
     {
         get => isSliding;
@@ -43,7 +46,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool IsReadyToFalling => transform.position.x >= 0;
+    public bool IsReadyToFalling => transform.position.x >= -0.01f;
 
     // ���� �ʵ�
     [SerializeField] float playerSpeed;
@@ -70,10 +73,10 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnitTest();
-        #endif
-        
+#endif
+
         if (isDead) return;
 
         // for test
@@ -98,17 +101,14 @@ public class Player : MonoBehaviour
                 if (moveVector.x < 0) spriteRenderer.flipX = true;
                 else if (moveVector.x > 0) spriteRenderer.flipX = false;
             }
-            if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(DashDetection(moveVector.x));
+
+            if (Input.GetButtonDown("Horizontal") && isDetectingDash) StartCoroutine(CoDetectDash(moveVector.x));
         }
     }
 
     private void UnitTest()
     {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            playerRigidbody.MovePosition(playerRigidbody.position +
-                                         Vector2.right * (GameManager.MoveSpeed * Time.deltaTime));
-        }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -156,7 +156,7 @@ public class Player : MonoBehaviour
     private void Jump()
     {
         if (jumpCount >= 2) return;
-        
+
         IsGrounded = false;
         jumpCount++;
         StartCoroutine(CoJump(jumpCount));
@@ -191,7 +191,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private IEnumerator DashDetection(float direction)
+    private IEnumerator CoDetectDash(float direction)
     {
         isDetectingDash = false;
 
@@ -200,11 +200,12 @@ public class Player : MonoBehaviour
         {
             if (t > 0 && Input.GetButtonDown("Horizontal") && Input.GetAxisRaw("Horizontal") == direction)
             {
-                StartCoroutine(Dash(direction));
+                StartCoroutine(CoDash(direction));
 
                 isDetectingDash = true;
                 yield break;
             }
+
             t += Time.deltaTime;
             yield return null;
         }
@@ -212,7 +213,7 @@ public class Player : MonoBehaviour
         isDetectingDash = true;
     }
 
-    private IEnumerator Dash(float direction)
+    private IEnumerator CoDash(float direction)
     {
         isDashing = true;
         animator.SetTrigger("Dash");
@@ -232,6 +233,7 @@ public class Player : MonoBehaviour
             t += Time.deltaTime;
             yield return null;
         }
+
         color.a = 0;
         dashEffect.color = color;
         isDashing = false;
@@ -246,17 +248,36 @@ public class Player : MonoBehaviour
 
     public void FallingToRunning()
     {
-        spriteRenderer.flipX = false;
-        playerRigidbody.gravityScale = 1.0f;
+        animator.SetBool("Parachute", true);
+        playerRigidbody.AddForce(Vector2.down * (GameManager.MoveSpeed * 10));
+        StartCoroutine(nameof(CoDetectGround));
+    }
+
+    private IEnumerator CoDetectGround()
+    {
+        while (true)
+        {
+            var hit = Physics2D.Raycast(transform.position, Vector2.down, Mathf.Infinity,
+                LayerMask.GetMask("Cloud"));
+            Debug.Log(hit.distance);
+            if (hit.distance < 1.1f)
+            {
+                IsGrounded = true;
+                yield break;
+            }
+            yield return null;
+        }
     }
 
     public void SetRunningAttribute()
     {
         spriteRenderer.flipX = false;
         playerRigidbody.gravityScale = 1.0f;
+        playerRigidbody.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+        transform.DOMoveX(-6, 2);
         animator.SetBool("IsRunningStage", true);
     }
-    
+
     public void SetFallingAttribute()
     {
         playerRigidbody.velocity = Vector3.zero;

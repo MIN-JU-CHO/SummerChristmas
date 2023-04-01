@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 702487324182650323}
   - component: {fileID: 579890730010078108}
   - component: {fileID: 4973350357583349751}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FallingCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 7076406806423321282}
   - component: {fileID: 6227274584531652124}
   - component: {fileID: 6909060379693500679}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RunningToFallingCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -444,7 +444,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 193629130750374318}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -888,7 +888,7 @@ GameObject:
   - component: {fileID: 7762782131982499404}
   - component: {fileID: 7762782131982499410}
   - component: {fileID: 2332177744532017431}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RunningCloud
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1145,7 +1145,7 @@ GameObject:
   - component: {fileID: 7555304528818449626}
   - component: {fileID: 1515556929676538202}
   - component: {fileID: 4500539877427085080}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FallingToRunningCloud
   m_TagString: Untagged
   m_Icon: {fileID: 0}

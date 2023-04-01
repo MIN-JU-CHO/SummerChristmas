@@ -25,7 +25,7 @@ public class Background : MonoBehaviour
         screenUp = Camera.main.ViewportToWorldPoint(Vector3.up).y;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         ScrollBackground();
         CheckOutOfScreen();
@@ -38,10 +38,10 @@ public class Background : MonoBehaviour
             switch (GameManager.CurrentGameState)
             {
                 case GameState.Running:
-                    transform.Translate(Vector3.left * (GameManager.MoveSpeed * Time.fixedDeltaTime));
+                    transform.Translate(Vector3.left * (GameManager.MoveSpeed * Time.deltaTime));
                     break;
                 case GameState.Falling:
-                    transform.Translate(Vector3.up * (GameManager.MoveSpeed * Time.fixedDeltaTime));
+                    transform.Translate(Vector3.up * (GameManager.MoveSpeed * Time.deltaTime));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -82,7 +82,7 @@ public class Background : MonoBehaviour
                 
                 runningCloud.SetActive(true);
                 fallingCloud.SetActive(false);
-                GameManager.FallingToRunning();
+                GameManager.FallingToRunning().Forget();
 
             }
             else
